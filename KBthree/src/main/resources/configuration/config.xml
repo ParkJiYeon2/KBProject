@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+	<configuration>
+	 <settings>
+        <setting name="jdbcTypeForNull" value="NULL"/>
+    </settings>
+	<typeAliases>
+<!-- 상담예약 멤버변수 -->
+<typeAlias alias="CounselingDTO" type="hera.cules.three.soo.dto.CounselingDTO" />
+<!-- 페이징 처리 -->
+<typeAlias alias="Criteria" type="hera.cules.three.soo.dto.Criteria" />
+<typeAlias alias="PageMaker" type="hera.cules.three.soo.dto.PageMaker" />
+<!-- 회원가입 멤버변수 -->
+<typeAlias alias="MemberDTO" type="hera.cules.three.member.dto.MemberDTO"/>
+<!-- 공지사항 -->
+<typeAlias alias="NoticeDTO" type="hera.cules.three.yeon.dto.NoticeDTO"/>
+	</typeAliases>
+</configuration>

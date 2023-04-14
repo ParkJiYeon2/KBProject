@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="hera.cules.three">
+  <!-- 전체조회 + 페이징 -->
+<select id="noticeselectAll" resultType="NoticeDTO" parameterType="Criteria">
+		SELECT num, name, subject, content, writeday
+		FROM (
+		SELECT num, name, subject, content, writeday,
+		ROW_NUMBER() OVER(ORDER BY num DESC) AS RNUM
+		FROM NOTICE_BOARD)
+		WHERE RNUM BETWEEN #{rowStart} AND #{rowEnd}
+		ORDER BY NUM DESC
+	</select>
+
+  
+<!-- 공지 총개수 -->
+<select id="noticeListCount" parameterType="NoticeDTO" resultType="java.lang.Integer">
+	<![CDATA[
+	select
+		count(num)
+	from
+		NOTICE_BOARD
+		where num > 0
+			]]>
+</select>
+ <!-- 상세 조회 --> 
+  <select id="noticeselect" parameterType="NoticeDTO" resultType="NoticeDTO">
+    select
+    num, name, subject, content,  to_char(writeday, 'yyyy-mm-dd') writeday
+    from NOTICE_BOARD
+    where
+    num = #{num}  
+  </select>
+  
+  <!-- 공지 등록 -->
+  <insert id="noticeinsert" parameterType="NoticeDTO">
+    insert
+    into NOTICE_BOARD
+    (num, name, subject, content, writeday)
+    values( #{num},
+    #{name}, #{subject}, #{content}, sysdate)
+  </insert>
+  
+  <!-- 공지 등록 글번호 자동입력 -->
+  <select id="noticemaxNum" resultType="int">
+  select NVL(max(num), 0) from NOTICE_BOARD
+  </select>
+  
+  <!-- 첨부파일 업로드 -->
+  <insert id="noticeinsertFile" parameterType="hashMap">
+		INSERT INTO NOTICE_FILE(
+			FILE_NUM,
+			NUM,
+			ORG_FILE_NAME,
+			STORED_FILE_NAME,
+			FILE_SIZE
+		)VALUES(
+			SEQ_FILE_NO.NEXTVAL,
+			#{NUM},
+			#{ORG_FILE_NAME},
+			#{STORED_FILE_NAME},
+			#{FILE_SIZE}
+		)
+    </insert>
+    
+    <!-- 첨부파일 업로드 조회 -->
+    <select id="noticeselectFileList" parameterType="int" resultType="hashMap">
+	SELECT FILE_NUM,
+		   ORG_FILE_NAME,
+		   ROUND(FILE_SIZE/1024,1) AS FILE_SIZE
+	  FROM NOTICE_FILE
+	 WHERE NUM = #{NUM}
+	   AND DEL_GB = 'N'
+    ORDER BY FILE_NUM ASC
+</select>
+    
+    <!-- 첨부파일 다운 -->
+<select id="noticeselectFileInfo" parameterType="hashMap" resultType="hashMap">
+	SELECT 
+		STORED_FILE_NAME,
+		ORG_FILE_NAME
+	FROM NOTICE_FILE
+	WHERE FILE_NUM = #{FILE_NUM}
+</select>
+
+    <!-- 다중 파일첨부- 삭제여부 수정 -->
+ <update id="noticeupdateFile" parameterType="hashMap">
+    	UPDATE NOTICE_FILE SET
+    	DEL_GB = 'Y'
+    	WHERE FILE_NUM = #{FILE_NUM}
+    </update>
+  
+  <!-- 공지 수정 -->
+  <update id="noticeupdate" parameterType="NoticeDTO">
+    update
+   NOTICE_BOARD set subject = #{subject},content = #{content}
+    where num = #{num}
+  </update>
+  
+  <!-- 공지 삭제 -->
+  <delete id="noticedelete" parameterType="NoticeDTO">
+    delete
+    from NOTICE_BOARD
+    where num = #{num}
+  </delete>
+</mapper>

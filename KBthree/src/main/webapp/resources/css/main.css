@@ -1,0 +1,57 @@
+.loginForm {
+ position: relative;
+ width: 435px;
+}
+
+.loginForm .box {
+ width: 250px;
+ margin-top: 60px; 
+ margin-left: 46px;
+}
+
+.loginForm .box .iText {
+ width: 260px;
+ margin: 3px 0;
+ padding: 10px 12px;
+ border: 1px solid #e1e1e1;
+}
+
+.loginForm .box p span, .loginForm .box p input {
+ height: 18px;
+ font-size: 11px;
+ color: #737373;
+ line-height: 18px;
+ vertical-align: middle;
+}
+
+.loginForm .loginBtn {
+ display: block;
+ position: absolute;
+ top: 2px;
+ right: 0px;
+ width: 90px;
+ height: 80px;
+ padding: 10px;
+ border-radius: 5px;
+ font-size: 18px;
+ font-weight: 700;
+ color: #333;
+ line-height: 60px;
+ text-align: center;
+/*  text-shadow: 1px 1px 1px #004773; */
+ background: #FFCF02;
+}
+legend{
+font-size: 30px;
+background-color: #FFCF02;
+/* border : 2px solid black; */
+}
+fieldset{
+background-color:#FFFFFF; position: absolute; border: 1; width: 500px; height: 595px; top: 130px; left: 850px;
+}
+ .img2{
+position: relative; left: 360px; top: 100px;
+ }
+ body{
+ background-color: #FFF4F6;
+ }

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 네임스페이스의 충돌을 방지하기 위해 설정한다.-->
+<mapper namespace="Hera.cules.three.jin">
+<!-- 전체 컬럼값을 조회하고 결과 저장은 DeptDTO 클래스로 설정한다.-->
+<select id="memberselectAll" resultType="MemberDTO" parameterType="hera.cules.three.soo.dto.Criteria">
+    select *
+       from (select id, name, pass, postcode, address, detailAddress, to_char(birthday, 'yyyy-mm-dd') birthday, email, at, domain, telecom, phonenum, phonenum2, accountnum, accountpass, compname, deptname, compphone, compaddress, reqpost, reqemail, reqsms, num, job, interest, row_number() over(order by num desc) as rNum
+           from MEMBER_KB where id !='admin' order by num desc) mb
+      where  rNum between #{rowStart} and #{rowEnd} 
+          order by num desc
+  </select>
+  <select id="memberselect" parameterType="MemberDTO" resultType="MemberDTO">
+    select
+    num, id, name, pass, to_char(birthday, 'yyyy-mm-dd') birthday, email, at, domain, telecom, phonenum, phonenum2, accountnum, compname, deptname, compphone, compaddress, reqpost, reqemail, reqsms, job, interest, address, detailAddress, postcode
+    from MEMBER_KB
+    where
+    id = #{id}
+  </select>
+  <insert id="memberinsert" parameterType="MemberDTO">
+    insert
+    into MEMBER_KB (id, name, pass, postcode, address, detailAddress, birthday, email, at, domain, telecom, phonenum, phonenum2, accountnum, accountpass, compname, deptname, compphone, compaddress, reqpost, reqemail, reqsms, num, job, interest)
+    values(#{id}, #{name}, #{pass}, #{postcode}, #{address},#{detailAddress}, #{birthday}, #{email}, #{at}, #{domain}, #{telecom}, #{phonenum}, #{phonenum2}, #{accountnum}, #{accountpass}, #{compname}, #{deptname}, #{compphone}, #{compaddress}, #{reqpost}, #{reqemail}, #{reqsms}, autonum.nextval, #{job}, #{interest})
+  </insert>
+
+  <update id="memberupdate" parameterType="MemberDTO">
+    update
+    MEMBER_KB set name = #{name}, postcode = #{postcode}, address = #{address}, detailAddress = #{detailAddress}, email = #{email}, domain = #{domain}, telecom = #{telecom}, phonenum = #{phonenum}, phonenum2 = #{phonenum2}, compname = #{compname}, deptname = #{deptname}, compphone = #{compphone}, compaddress = #{compaddress}, reqpost = #{reqpost}, reqemail = #{reqemail}, reqsms = #{reqsms}, job = #{job}
+    where id = #{id}
+  </update>
+  
+  <update id="memberpassupdate" parameterType="MemberDTO">
+  update
+  MEMBER_KB set pass = #{pass}
+  where id = #{id}
+  </update>
+  
+  <delete id="memberdelete" parameterType="MemberDTO">
+    delete
+    from MEMBER_KB
+    where id = #{id}
+  </delete>
+  
+  <select id="memberlogincheck" resultType="MemberDTO">
+  select
+  *
+  from MEMBER_KB
+  where id= #{id} and pass= #{pass}
+  </select>
+  
+  <select id="membercount" resultType="int">
+  select count(num)
+  from (select num  from MEMBER_KB where id !='admin' order by num desc)
+  </select>
+  
+  <select id="memberlistpage" resultType="MemberDTO" parameterType="hera.cules.three.soo.dto.Criteria">
+    select *
+       from (select id, name, pass, postcode, address, detailAddress, birthday, email, at, domain, telecom, phonenum, phonenum2, accountnum, accountpass, compname, deptname, compphone, compaddress, reqpost, reqemail, reqsms, num, job, interest, row_number() over(order by num desc) as rNum
+           from MEMBER_KB) mb
+      where rNum between #{rowStart} and #{rowEnd}
+          order by num desc
+</select>
+
+  <select id="memberlistcount" resultType="int">
+  <![CDATA[
+  select count(num)
+  from MEMBER_KB where num > 0
+  ]]>
+  </select>
+  
+  <select id="memberidsearch" resultType="MemberDTO" parameterType="MemberDTO">
+  select * from MEMBER_KB
+  where name = #{name} and email = #{email} and domain = #{domain}
+  </select>
+  
+  <select id="memberpasswordsearch" resultType="MemberDTO" parameterType="MemberDTO">
+  select * from MEMBER_KB
+  where id = #{id} and email = #{email} and domain = #{domain}
+  </select>
+  
+</mapper>

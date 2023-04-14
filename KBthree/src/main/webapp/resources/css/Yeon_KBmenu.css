@@ -1,0 +1,92 @@
+@charset "utf-8";
+@font-face {
+  font-family: "KBFGDisplayB"; 
+  src: url("../font/KBFGDisplayB.otf") format("opentype");
+}
+
+#menu1{
+		background:#5f584c;
+}
+
+#menu1 ul{
+	width:1000px;
+	height:55px;
+	list-style:none;
+	overflow: hidden;
+	padding:0;
+
+	}
+
+#menu1 ul li{
+	float:left; 
+	width:12%;
+	height: 100%;
+	text-align: center;
+	background: #5f584c;
+
+	}
+
+#menu1 ul li a{
+	display: block;
+	font: 17px'KBFGDisplayB',sans-serif;
+	color:white;
+	text-decoration:none;
+	line-height:55px;
+	
+	
+	}
+
+#menu1 ul li a:hover:not(.active) {
+		display: block;
+		width:100%;
+    background-color: #7c7363;
+    	height: 55px;
+    		list-style:none;
+    		text-align: center;
+
+    color: white;
+}
+
+fieldset{
+	margin: 15px 10px;
+}
+
+fieldset legend{
+	align="center"
+}
+
+
+
+.page-item.active .page-link {
+    z-index: 3;
+    color: #5f584c;
+    background-color: #f8b500;
+    border-color: #f8b500;
+	font-weight: bold;
+}
+.page-link {
+    position: relative;
+    display: block;
+    padding: 0.5rem 0.75rem;
+    margin-left: -1px;
+    line-height: 1.25;
+    color: #5f584c;
+    background-color: #fff;
+    border: 1px solid #dee2e6;
+	font-weight: bold;
+
+}
+	
+ input[type="file"] {
+    overflow: hidden;
+    display: inline-block;
+    background: white;
+    border: 1px solid #dee2e6;
+    color: #5f584c;
+    font-size: 15px;
+    margin:10spx;'
+}
+
+
+
+

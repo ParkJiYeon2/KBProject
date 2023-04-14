@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE    mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="hera.cules.three.soo.dto">
+<!-- 전체조회 , 페이징 처리 -->
+	<select id="selectAll" parameterType="Criteria" resultType="CounselingDTO">
+	 select rnum, num, name, address, postcode, detailaddress, subject, content, businesschoice, phonenumber, reservation, writeday, hit 
+		 from ( select rownum , num, name, address, postcode, detailaddress, subject, content, businesschoice, phonenumber, reservation, writeday, hit, row_number() over(order by num desc) 
+		 as rnum from counselingboard
+		 )
+		where rnum between #{rowStart} and #{rowEnd}
+		order by num desc
+	</select>
+	<!-- 상세 조회 -->
+	<select id="select" parameterType="CounselingDTO" resultType="CounselingDTO">
+		select num, name, address, postcode, detailaddress, subject, content, businesschoice, phonenumber, reservation, writeday, hit, id from counselingboard
+		where num = #{num}
+	</select>
+	
+	<!-- 인설트 -->
+	<insert id="insert" parameterType="CounselingDTO">	
+	<!-- 맥스 함수 쿼리문 설정 -->
+	<selectKey keyProperty="num" resultType="int" order="BEFORE">
+select NVL(max(to_number(trim(num))),0)+1 from counselingboard
+</selectKey>
+		insert into counselingboard (num, name, address, postcode, detailaddress, subject, content, businesschoice, phonenumber, reservation )
+		values(#{num}, #{name}, #{address},#{postcode}, #{detailaddress}, #{subject},#{content}, #{businesschoice}, #{phonenumber}, #{reservation})
+	</insert>
+	
+	<!--  업데이트 -->
+	<update id="update" parameterType="CounselingDTO">
+		update counselingboard set subject = #{subject}, postcode = #{postcode}, address = #{address}, detailaddress = #{detailaddress}, businesschoice = #{businesschoice}, content = #{content}, reservation = #{reservation}
+		where num = #{num}
+	</update>
+	<!--  삭제 -->
+	<delete id="delete" parameterType="CounselingDTO">
+		delete from counselingboard
+		where num = #{num}
+	</delete>
+	<!-- 게시글 총 갯수 구하기 -->
+	<select id="countsoo" resultType="int">
+	<![CDATA[
+	select count(num)
+		  from counselingboard
+		 where num > 0
+		 ]]>
+	</select>
+	 <!-- 게시판 조회수 -->
+    <update id="hit" parameterType="int">
+    	update counselingboard set
+    	hit = hit+1
+    	where num = #{num}
+    </update>
+</mapper>
